@@ -7,11 +7,20 @@ MongoCLient.connect(URL,function(error,MyMongoClient){
         console.log("Connection failed");
     }else{
         console.log("Connection success");
-        InsertData(MyMongoClient);
+        //InsertData(MyMongoClient);
         // DeleteData(MyMongoClient);
         // DeleteAllData(MyMongoClient);
         //findOneWithoutCondition(MyMongoClient);
-        findOneWithCondition(MyMongoClient);
+        //findOneWithCondition(MyMongoClient);
+        //findAllData(MyMongoClient);
+        // findAllDataByProjection(MyMongoClient);
+        // findAllDataByQuery(MyMongoClient);
+        // findAllDataByLImit(MyMongoClient);
+        // findAllDataBySort(MyMongoClient);
+        // updateMyData(MyMongoClient);
+        // createMyCollection(MyMongoClient)
+        DeleteMyCollection(MyMongoClient)
+
     }
 });
 
@@ -82,6 +91,83 @@ function findOneWithCondition(MyMongoClient){
     });
 }
 
+function findAllData(MyMongoClient){
+    var MyDatabase = MyMongoClient.db("school");
+    var MyCollection = MyDatabase.collection("students");
 
+    MyCollection.find().toArray(function(error,result){
+        console.log(result);
 
+    })
+}
 
+function findAllDataByProjection(MyMongoClient){
+    var MyDatabase = MyMongoClient.db("school");
+    var MyCollection = MyDatabase.collection("students");
+
+    var ItemObj = {};
+    var ItemProjection = {projection:{class:"Ten",Name:"gobi"}}
+    MyCollection.find(ItemObj,ItemProjection).toArray(function(error,result){
+        console.log(result);
+
+    })
+}
+
+function findAllDataByQuery(MyMongoClient){
+    var MyDatabase = MyMongoClient.db("school");
+    var MyCollection = MyDatabase.collection("students");
+
+    var Query = {"name":"mahi","class":"Three"};
+    MyCollection.find(Query).toArray(function(error,result){
+        console.log(result);
+
+    });
+}
+
+function findAllDataByLImit(MyMongoClient){
+    var MyDatabase = MyMongoClient.db("school");
+    var MyCollection = MyDatabase.collection("students");
+
+    MyCollection.find().limit(3).toArray(function(error,result){
+        console.log(result);
+
+    });
+}
+
+function findAllDataBySort(MyMongoClient){
+    var MyDatabase = MyMongoClient.db("school");
+    var MyCollection = MyDatabase.collection("students");
+
+    var Sortpattern = {age:1}; //forSerialwise
+    //var Sortpattern = {age:-1}; //forReverseSerialwise
+    MyCollection.find().sort(Sortpattern).toArray(function(error,result){
+        console.log(result);
+
+    });
+}
+
+function updateMyData(MyMongoClient){
+    var MyDatabase = MyMongoClient.db("school");
+    var MyCollection = MyDatabase.collection("students");
+
+    var MyQuerry={name:"sishir"};
+    var MyNewValues={$set:{name:"Safa",class:"One"}};
+
+    MyCollection.updateOne(MyQuerry,MyNewValues,function(error,result){
+        console.log(result);
+    });
+}
+
+function createMyCollection(MyMongoClient){
+    var MyDatabase = MyMongoClient.db("school");
+    MyDatabase.createCollection("teachers",function(error,result){
+        console.log(result);
+    });
+}
+
+function DeleteMyCollection(MyMongoClient){
+    var MyDatabase = MyMongoClient.db("school");
+    MyDatabase.dropCollection("teachers",function(error,result){
+        console.log(result);
+    });
+}
